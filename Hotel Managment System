@@ -1,0 +1,351 @@
+#include<iostream>
+#include<string>
+#include<iomanip>
+#include<vector>
+using namespace std;
+struct Service
+{
+	string name;
+	int price;
+};
+struct Hotel
+{
+	int roomnumber[10];
+	bool occupied[10];
+	char guestname[10][50];
+	char contactnumber[10][15];
+	char cnic[10][15];
+	char address[10][100];
+	int roomtype[10];
+	int numnights[10];
+	vector<Service> services[10];
+
+};
+//it will display room status
+void displayrooms(Hotel& hotel)
+{
+	cout << "Room Status:" << endl;
+	cout << setw(12) << "Room Number" << setw(15) << "Occupancy" << endl;
+	for (int i = 0; i < 10; ++i)
+	{
+		if (hotel.occupied[i] )
+		{
+			cout << setw(12) << hotel.roomnumber[i] << setw(15) << "Occupied" << endl;
+		}
+		else
+		{
+			cout << setw(12) << hotel.roomnumber[i] << setw(15) << "Vacant" << endl;
+		}
+	}
+	cout << endl;
+}
+void roomdetails()
+{
+	cout << "****Room Details****"<<endl;
+	cout << "1. Room Prices:"<<endl;
+	cout << "   - 1 Bed: 3000 per night" << endl;
+	cout << "   - 2 Bed: 5000 per night" << endl;
+	cout << "   - 3 Bed: 7000 per night"<<endl;
+	cout << "2. Additional Services:"<<endl;
+	cout << "   - Breakfast: 20 per person"<<endl;
+	cout << "   - Lunch: 30 per person"<<endl;
+	cout << "   - Dinner: 40 per person"<<endl;
+	cout << "   - Airport Shuttle: 50 per trip" << endl;
+	cout << "   - Laundry: 10 per item"<<endl;
+	cout << "If you need any further assistance, please contact the front desk."<<endl;
+	cout << "Thank you for visiting Sultan's Group of Hotels!"<<endl;
+}
+void checkIn(Hotel& hotel)
+{
+	int room;
+	cout << "Enter room number to check-in: " << endl;;
+	cin >> room;
+	if (room < 1 || room > 10)
+	{
+		cout << "Invalid room number!" << endl;
+		return;
+	}
+	if (hotel.occupied[room - 1])
+	{
+		cout << "Room is already occupied!"<<endl;
+	}
+	else
+	{
+		hotel.occupied[room - 1] = true;
+		cout << "Enter guest name: ";
+		cin. ignore();
+		cin.getline(hotel.guestname[room - 1], 50);
+		cout << "Enter contact number: ";
+		cin.getline(hotel.contactnumber[room - 1], 15);
+		cout << "Enter CNIC: ";
+		cin.getline(hotel.cnic[room - 1], 15);
+		cout << "Enter address: ";
+		cin.getline(hotel.address[room - 1], 100);
+			cout << "Enter room type (1 for 1 bed, 2 for 2 bed, 3 for 3 bed): ";
+			cin >> hotel.roomtype[room - 1];
+		cout << "Enter the number of nights do you want to stay: ";
+		cin >> hotel.numnights[room - 1];
+		char wantbreakfast, wantlunch, wantdinner, wantshuttle, wantlaundry;
+		cout << "Do you want to avail breakfast? (y/n): ";
+		cin >> wantbreakfast;
+		cout << "Do you want to avail lunch? (y/n): ";
+		cin >> wantlunch;
+		cout << "Do you want to avail dinner? (y/n): ";
+		cin >> wantdinner;
+		cout << "Do you want to avail airport shuttle? (y/n): ";
+		cin >> wantshuttle;
+		cout << "Do you want to avail laundry? (y/n): ";
+		cin >> wantlaundry;
+		//It will Display room type and their price
+		int roomtype = hotel.roomtype[room - 1];
+		int costpernight = 0;
+		switch (roomtype)
+		{
+		case 1:
+			costpernight = 3000; // 1 bed price
+			break;
+		case 2:
+			costpernight = 5000; // 2 bed price
+			break;
+		case 3:
+			costpernight = 7000; // 3 bed price
+			break;
+		default:
+			cout << "Invalid room type!"<<endl;
+			return;
+		}
+		int totalCost = costpernight * hotel.numnights[room - 1];
+		// It will add prices of additional services
+		if (wantbreakfast == 'y')
+		{
+			hotel.services[room-1].push_back({"Breakfast", 20});
+		}
+		if (wantlunch == 'y')
+		{
+			hotel.services[room-1].push_back({"Lunch", 30});
+		}
+		if (wantdinner == 'y')
+		{
+			hotel.services[room - 1].push_back({ "Dinner", 40 });
+		}
+		if (wantshuttle == 'y')
+		{
+			hotel.services[room - 1].push_back({ "Airport Shuttle", 50 });
+		}
+		if (wantlaundry == 'y')
+		{
+			hotel.services[room - 1].push_back({ "Laundry", 10 });
+		}
+		
+		cout << "Checked in successfully!"<<endl;
+		cout << "Total Cost for " << hotel.numnights[room - 1] << " nights: " << totalCost << endl;
+	}
+}
+void checkOut(Hotel& hotel) {
+	int room;
+	cout << "Enter room number to check-out: " << endl;
+	cin >> room;
+
+	// Validate room number
+	if (room < 1 || room > 10) {
+		cout << "Invalid room number!"<<endl;
+		return;
+	}
+
+	// Check if room is occupied
+	if (hotel.occupied[room - 1]) {
+		hotel.occupied[room - 1] = false;
+
+		// Display bill
+		cout << "Bill" << endl;
+		cout << "Guest Name: " << hotel.guestname[room - 1] << endl;
+		cout << "Contact Number: " << hotel.contactnumber[room - 1] << endl;
+		cout << "CNIC: " << hotel.cnic[room - 1] << endl;
+		cout << "Address: " << hotel.address[room - 1] << endl;
+		cout << "Room Type: " << hotel.roomtype[room - 1] << " bed(s)" << endl;
+
+		// Display additional services and their prices
+		cout << "Additional Services:"<<endl;
+		for (int i = 0; i < hotel.services[room - 1].size(); ++i) {
+			cout << "   - " << hotel.services[room - 1][i].name << ": " << hotel.services[room - 1][i].price;
+			if (hotel.services[room - 1][i].name != "Laundry") {
+				cout << " per person";
+			}
+			else {
+				cout << " per item";
+			}
+			cout << endl;
+		}
+
+		// Calculate total cost
+		int roomType = hotel.roomtype[room - 1];
+		int costPerNight = 0;
+
+		switch (roomType) {
+		case 1:
+			costPerNight = 3000; // 1 bed price
+			break;
+		case 2:
+			costPerNight = 5000; // 2 bed price
+			break;
+		case 3:
+			costPerNight = 7000; // 3 bed price
+			break;
+		default:
+			cout << "Invalid room type!"<<endl;
+			return;
+		}
+
+		int totalCost = costPerNight * hotel.numnights[room - 1];
+
+		// Add prices of additional services to total cost
+		for (int i = 0; i < hotel.services[room - 1].size(); ++i) {
+			totalCost += hotel.services[room - 1][i].price * hotel.numnights[room - 1];
+		}
+
+		// Display total cost
+		cout << "Total Cost for " << hotel.numnights[room - 1] << " nights: " << totalCost << endl;
+
+		// Take payment
+		float userAmount;
+		cout << "Enter the amount: ";
+		cin >> userAmount;
+
+		// Validate payment amount
+		while (userAmount < totalCost) {
+			cout << "Invalid amount entered. Please enter at least " << totalCost - userAmount << " more: ";
+			float additionalAmount;
+			cin >> additionalAmount;
+			userAmount += additionalAmount;
+		}
+
+		// Display payment details
+		cout << "Amount Paid: " << userAmount << endl;
+		cout << "Change: " << (userAmount - totalCost) << endl;
+		cout << "Payment Successful!"<<endl;
+		cout << "Checked out successfully!"<<endl;
+		cout << "Thank You for visiting Sultan's Group of Hotels"<<endl;
+
+	}
+	else {
+		// Room is not occupied
+		cout << "Room is already vacant!"<<endl;
+	}
+}
+
+void displaybookings(Hotel& hotel)
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if (hotel.occupied[i])
+		{
+			
+
+			cout << "**** Booking Details for Room " << hotel.roomnumber[i] << " ****" << endl;
+			cout << "Guest Name: " << hotel.guestname[i] << endl;
+			cout << "Contact Number: " << hotel.contactnumber[i] << endl;
+			cout << "CNIC: " << hotel.cnic[i] << endl;
+			cout << "Address: " << hotel.address[i] << endl;
+			cout << "Room Type: " << hotel.roomtype[i] << " bed(s)" << endl;
+
+			// Display additional services
+			
+				cout << "Additional Services:" << endl;
+				for (int j = 0; j < hotel.services[i].size(); ++j) {
+					cout << "   - " << hotel.services[i][j].name << ": " << hotel.services[i][j].price;
+					if (hotel.services[i][j].name != "Laundry") {
+						cout << " per person";
+					}
+					else {
+						cout << " per item";
+					}
+					cout << endl;
+				}
+			
+
+			cout << "Number of Nights: " << hotel.numnights[i] << endl;
+
+			// Calculate and display total cost
+			int roomtype = hotel.roomtype[i];
+			int costpernight = 0;
+			switch (roomtype)
+			{
+			case 1:
+				costpernight = 3000; // 1 bed price
+				break;
+			case 2:
+				costpernight = 5000; // 2 bed price
+				break;
+			case 3:
+				costpernight = 7000; // 3 bed price
+				break;
+			default:
+				cout << "Invalid room type!" << endl;
+				return;
+			}
+
+			int totalCost = costpernight * hotel.numnights[i];
+
+			// Add costs of additional services to total cost
+			for (int j = 0; j < hotel.services[i].size(); ++j) {
+				totalCost += hotel.services[i][j].price * hotel.numnights[i];
+			}
+
+			cout << "Total Cost: " << totalCost << endl;
+			cout << "----------------------------------" << endl;
+		}
+	}
+	
+		cout << "No bookings found." << endl;
+	}
+
+
+int main()
+{
+	Hotel hotel;
+	for (int i = 0; i < 10; ++i)
+	{
+		hotel.roomnumber[i] = i + 1;
+		hotel.occupied[i] = false;
+	}
+	int choice;
+	do {
+		cout << "****Welcome to Sultan's Group of Hotels****\n****How can I help You?***"<<endl;
+		cout << "1. Room Details"<<endl;
+		cout << "2. Display Room Status"<<endl;
+		cout << "3. Check-In"<<endl;
+		cout << "4. Check-Out"<<endl;
+		cout << "5. Display Bookings"<<endl;
+		cout << "6. Exit"<<endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			roomdetails();
+			break;
+		case 2:
+			displayrooms(hotel);
+			break;
+		case 3:
+			checkIn(hotel);
+			break;
+		case 4:
+			checkOut(hotel);
+			break;
+		case 5:
+			displaybookings(hotel);
+			break;
+		case 6:
+			cout << "Exiting the program. Goodbye!\n";
+			break;
+		default:
+			cout << "Invalid choice. Please try again.\n";
+		}
+	} while (choice != 6);
+	return 0;
+}
+	
+
+
+
