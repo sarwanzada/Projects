@@ -1,0 +1,248 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+struct CustomerDetails
+{
+    string name;
+    string city;
+    int age;
+    double phone;
+    string gender;
+    string email;
+};
+
+struct TicketReservation
+{
+    int option;
+    double cnic;
+    string departurecity;
+    string arrivalcity;
+    string dep_date;
+    string arrival_date;
+    string price;
+    string preference;
+    double passnum;
+    string exp_date;
+    string visa_approval;
+    string visa_exp;
+    double visa_num;
+    string visa_type;
+    string flightNumber;
+    string seatNumber;
+};
+
+const int MAX_RESERVATIONS = 100;
+TicketReservation reservations[MAX_RESERVATIONS];
+int currentReservationIndex = 0;
+
+void customerdetails(CustomerDetails* customer);
+void ticketreservation(TicketReservation* ticket);
+int airlinedomestic();
+int airlineinter();
+void viewReservations();
+
+int main()
+{
+    char ch;
+    int choice;
+    cout << endl;
+    cout << "\t\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << endl;
+    cout << "\t\t*                                                                               *" << endl;
+    cout << "\t\t*                  Welcome to the Airline Reservation  System!                  *" << endl;
+    cout << "\t\t*                                                                               *" << endl;
+    cout << "\t\t*     Fly with Ease, Reserve with Confidence : Your Journey, Our Priority!      *" << endl;
+    cout << "\t\t*                                                                               *" << endl;
+    cout << "\t\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << endl;
+    cout << endl;
+    cout << "\t\t\tPlease choose from the following options to proceed:" << endl;
+    cout << endl;
+    do
+    {
+        cout << "\t\t\t\t1. Domestic Airline Details" << endl;
+        cout << "\t\t\t\t2. International Airline Details" << endl;
+        cout << "\t\t\t\t3. Ticket Reservation" << endl;
+        cout << "\t\t\t\t4. View Reservations" << endl;
+        cout << "\t\t\t\t5. Exit!" << endl;
+        cout << "\nPlease Enter Your Choice: ";
+        cin >> choice;
+        cin.ignore();
+        switch (choice)
+        {
+        case 1:
+            airlinedomestic();
+            break;
+        case 2:
+            airlineinter();
+            break;
+        case 3:
+        {
+            TicketReservation ticket;
+            ticketreservation(&ticket);
+            break;
+        }
+        case 4:
+            viewReservations();
+            break;
+        case 5:
+            cout << "\n\t\t\t\t========== Hope You Are Satisfied With Our Service! See You Next Time ==========" << endl;
+            break;
+        default:
+            cout << "You entered an invalid choice" << endl;
+        }
+        cout << "Enter Y if You want to continue otherwise press any key" << endl;
+        cin >> ch;
+    } while (ch == 'Y' || ch == 'y');
+    return 0;
+}
+
+void customerdetails(CustomerDetails* customer)
+{
+    cout << "\t\t\t\t==========  Customer Details ==========" << endl;
+    cout << "\nEnter Name: ";
+    getline(cin, (*customer).name);
+    cout << "Enter City: ";
+    getline(cin, customer->city);
+    cout << "Enter Gender: ";
+    getline(cin, customer->gender);
+    cout << "Age: ";
+    cin >> customer->age;
+    cout << "Enter Phone Number: ";
+    cin >> customer->phone;
+    cin.ignore();
+    cout << "Enter E-mail: ";
+    getline(cin, customer->email);
+}
+
+void ticketreservation(TicketReservation* ticket)
+{
+    CustomerDetails customer;
+    cout << "\t\t\t\t1. To Book Domestic Flight" << endl;
+    cout << "\t\t\t\t2. To Book International Flight" << endl;
+    cout << "\nEnter a choice :";
+    cin >> ticket->option;
+    cin.ignore();
+    switch (ticket->option)
+    {
+    case 1:
+        customerdetails(&customer);
+        cout << "Enter your CNIC :";
+        cin >> ticket->cnic;
+        cin.ignore();
+        cout << "\n\t\t\t\t==========  Flight Details ==========" << endl;
+        cout << "\nEnter Departure city/airport: ";
+        getline(cin, ticket->departurecity);
+        cout << "Enter Arrival city/airport: ";
+        getline(cin, ticket->arrivalcity);
+        cout << "Enter Departure date: ";
+        getline(cin, ticket->dep_date);
+        cout << "Enter Arrival date: ";
+        getline(cin, ticket->arrival_date);
+        cout << "Enter Price: ";
+        getline(cin, ticket->price);
+        cout << "Enter your preference 'Economy' or 'Business': ";
+        getline(cin, ticket->preference);
+        cout << "Enter  Flight number: ";
+        getline(cin, ticket->flightNumber);
+        cout << "Enter  seat number: ";
+        getline(cin, ticket->seatNumber);
+        reservations[currentReservationIndex++] = *ticket;
+        cout << "\n\t\t\t\t========== Thankyou for reservation! Have a Safe Flight ==========" << endl;
+        break;
+    case 2:
+        customerdetails(&customer);
+        cout << "Enter your Passport number: ";
+        cin >> ticket->passnum;
+        cin.ignore();
+        cout << "Enter your Passport expiration date: ";
+        getline(cin, ticket->exp_date);
+        cout << "Enter visa Number: ";
+        cin >> ticket->visa_num;
+        cin.ignore();
+        cout << "Enter visa type (student Visa, tourist Visa, family visa): ";
+        getline(cin, ticket->visa_type);
+        cout << "Enter visa Approval date: ";
+        getline(cin, ticket->visa_approval);
+        cout << "Enter visa Expiration date: ";
+        getline(cin, ticket->visa_exp);
+        cout << "\n\t\t\t\t==========  Flight Details ==========" << endl;
+        cout << "\nEnter Departure city/airport: ";
+        getline(cin, ticket->departurecity);
+        cout << "Enter Arrival city/airport: ";
+        getline(cin, ticket->arrivalcity);
+        cout << "Enter Departure date: ";
+        getline(cin, ticket->dep_date);
+        cout << "Enter Arrival date: ";
+        getline(cin, ticket->arrival_date);
+        cout << "Enter Price: ";
+        getline(cin, ticket->price);
+        cout << "Enter your preference 'Economy' or 'Business': ";
+        getline(cin, ticket->preference);
+        cout << "Enter  Flight number: ";
+        getline(cin, ticket->flightNumber);
+        cout << "Enter  seat number: ";
+        getline(cin, ticket->seatNumber);
+        reservations[currentReservationIndex++] = *ticket;
+        cout << "\n\t\t\t\t========== Thankyou for reservation! Have a Safe Flight ==========" << endl;
+        break;
+    default:
+        cout << "Invalid option selected" << endl;
+    }
+}
+
+int airlinedomestic()
+{
+    int const size = 6;
+    string Airline_Name[size] = { "PIA-Gold","Air-Blue","Red-Rose","Fly-Jinnah","Shaheen" };
+    string Airline_No[size] = { "B-707","A-503","R-401","J-306","S-102" };
+    string Rates[size] = { "Rs.30000","Rs.25000","Rs.45000","Rs.35000","Rs.50000" };
+    string Arrival_Time[size] = { "2:00PM","12:00AM","5:00AM","9:00PM","7:00PM" };
+    string Depart_Time[size] = { "6:20PM","3:30AM","2:50PM","12:10AM","10:40PM" };
+    cout << "\n    Airline Name \t\t Airline Number \t\t  Rates \t\t Departure Time\t\t Arrival Time\n";
+    cout << "\n\n";
+    for (int i = 0; i < size - 1; i++)
+    {
+        cout << "\n" << i + 1 << ".  " << Airline_Name[i] << " \t\t\t " << Airline_No[i] << " \t\t\t\t " << Rates[i] << " \t\t "
+            << Depart_Time[i] << " \t\t " << Arrival_Time[i] << endl;
+    }
+    cout << "\n\n";
+    return 0;
+}
+
+int airlineinter()
+{
+    int const size = 6;
+    string Airline_Name[size] = { "Emirates","Etihad","Qatar","Turkish","American" };
+    string Airline_No[size] = { "E-669","E-809","Q-907","T-148","A-012" };
+    string Rates[size] = { "Rs.30000","Rs.25000","Rs.45000","Rs.35000","Rs.50000" };
+    string Arrival_Time[size] = { "2:00PM","12:00AM","5:00AM","9:00PM","7:00PM" };
+    string Depart_Time[size] = { "6:20PM","3:30AM","2:50PM","12:10AM","10:40PM" };
+    cout << "\n    Airline Name \t\t Airline Number \t\t  Rates \t\t Departure Time\t\t Arrival Time\n";
+    cout << "\n\n";
+    for (int i = 0; i < size - 1; i++)
+    {
+        cout << "\n" << i + 1 << ".  " << Airline_Name[i] << " \t\t\t " << Airline_No[i] << " \t\t\t\t " << Rates[i] << " \t\t "
+            << Depart_Time[i] << " \t\t " << Arrival_Time[i] << endl;
+    }
+
+    cout << "\n\n";
+    return 0;
+}
+
+void viewReservations()
+{
+    if (currentReservationIndex == 0) {
+        cout << "\n\t\t\t\t========== No reservations found ==========\n";
+        return;
+    }
+    cout << "\n\t\t\t\t========== List of Reservations ==========\n";
+    for (int i = 0; i < currentReservationIndex; ++i) {
+        cout << "\nReservation " << i + 1 << ":" << endl;
+        cout << "Flight Number: " << reservations[i].flightNumber << endl;
+        cout << "Seat Number: " << reservations[i].seatNumber << endl;
+        cout << "Departure time : " << reservations[i].dep_date << endl;
+        cout << "Arrival time : " << reservations[i].arrival_date << endl;
+        cout << "Price: " << reservations[i].price << endl;
+    }
+}
