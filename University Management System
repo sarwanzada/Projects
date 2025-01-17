@@ -1,0 +1,449 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <memory>
+#include <stdexcept>
+
+using namespace std;
+
+// Abstract User Class
+class User
+{
+protected:
+    string username;
+    string password;
+
+public:
+    User(const string& user, const string& pass)
+    {
+        username = user;
+        password = pass;
+    }
+    string getUsername() const
+    {
+        return username;
+    }
+    string getPassword() const
+    {
+        return password;
+    }
+    virtual string getRole() const = 0;
+    virtual ~User() = default;
+};
+
+// Student Class inheriting User
+class Student : public User
+{
+private:
+    // Store attendance data in a vector
+    vector<string> attendance;
+
+public:
+    Student(const string& username, const string& password) : User(username, password) {} //Check this
+    string getRole() const override
+    {
+        return "Student";
+    }
+
+    void markAttendance(const string& courseCode)
+    {
+        attendance.push_back(courseCode);
+        cout << "\n\tAttendance marked for course: " << courseCode << endl;
+    }
+
+    int viewAttendance(const string& courseCode)
+    {
+        int count = 0;
+        for (const auto& course : attendance) // check
+        {
+            if (course == courseCode)
+            {
+                count++;
+            }
+        }
+        cout << "\n\tTotal attendance for course " << courseCode << ": " << count << endl;
+        return count;
+    }
+};
+
+// Admin Class inheriting User
+class Admin : public User
+{
+public:
+    Admin() : User("admin", "admin@2") {} //Check
+
+    string getRole() const override
+    {
+        return "Admin";
+    }
+
+    void registerStudent(vector<shared_ptr<User>>& users)
+    {
+        system("cls");
+        string username, password;
+
+        cout << "\t*****************************************************\n";
+        cout << "\t*                                                   *\n";
+        cout << "\t*         - - - REGISTER STUDENT - - -              *\n";
+        cout << "\t*                                                   *\n";
+        cout << "\t*****************************************************\n";
+
+        cout << "\n\t- Enter Student Username: ";
+        cin >> username;
+        cout << "\n\t- Enter password: ";
+        cin >> password;
+
+        users.push_back(make_shared<Student>(username, password)); // check
+        cout << "\n\t=====================================================\n";
+        cout << "\t|      Student registered successfully!             |\n";
+        cout << "\t=====================================================\n";
+
+    }
+
+    void viewRegisteredStudents(const vector<shared_ptr<User>>& users)
+    { 
+        system("cls");
+        cout << "\t*****************************************************\n";
+        cout << "\t*                                                   *\n";
+        cout << "\t*         - - - REGISTERED STUDENTS - - -           *\n";
+        cout << "\t*                                                   *\n";
+        cout << "\t*****************************************************\n";
+        for (const auto& user : users)
+        {
+            if (user->getRole() == "Student")
+            {
+                cout << "\n\tUsername: " << user->getUsername() << endl;
+            }
+        }
+    }
+};
+
+// Course Class
+class Course
+{
+private:
+    string code;
+    string name;
+    vector<shared_ptr<User>> enrolledStudents;
+
+public:
+    Course(const string& code, const string& name) : code(code), name(name) {} //Check
+
+    string getCode() const
+    {
+        return code;
+    }
+    string getName() const
+    {
+        return name;
+    }
+
+    void enrollStudent(shared_ptr<User> student)
+    {
+        if (student->getRole() == "Student")
+        {
+            enrolledStudents.push_back(student);
+            cout << "\n\tStudent " << student->getUsername() << " enrolled in " << name << endl;
+        }
+        else
+        {
+            throw invalid_argument("\n\tOnly students can be enrolled.");
+        }
+    }
+
+    void viewEnrolledStudents() const
+    {
+        cout << "\n\t--- Students in " << name << " ---" << endl;
+        for (const auto& student : enrolledStudents)
+        {
+            cout << "\n\t";
+            cout << student->getUsername() << endl;
+        }
+    }
+};
+
+// System Class
+class UniversityAttendanceSystem
+{
+private:
+    vector<shared_ptr<User>> users;
+    vector<shared_ptr<Course>> courses;
+
+public:
+    void adminMenu()
+    {
+       system("cls");
+        string username, password;
+
+        while (true)
+        {
+            cout << "\n";
+            cout << "\t*****************************************************\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*            - - - ADMIN LOGIN - - -                *\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*****************************************************\n";
+            cout << "\n\t- Enter Admin Username: ";
+            cin.ignore();
+            getline(cin, username);
+            cout << "\n\t- Enter Admin Password: ";
+            cin >> password;
+
+            if (username == "Majid Zaman" && password == "admin12")
+            {
+                cout << "Login successful!\n";
+                break;
+            }
+            else
+            {
+                cout << "\n\t- Invalid username or password! Please try again.\n";
+            }
+        }
+
+        system("cls");
+        Admin admin;
+        while (true)
+        {
+           
+            cout << "\n";
+            cout << "\t*****************************************************\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*            - - - ADMIN MENU - - -                 *\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*****************************************************\n";
+
+            cout << "\n\t-----------------------------------------------------\n";
+            cout << "\t|  [1]  Register Student                            |\n";
+            cout << "\t|  [2]  View Registered Students                    |\n";
+            cout << "\t|  [3]  Add Course                                  |\n";
+            cout << "\t|  [4]  View Courses                                |\n";
+            cout << "\t|  [0]  Logout                                      |\n";
+            cout << "\t-----------------------------------------------------\n";
+
+            cout << "\n\t=====================================================\n";
+            cout << "\t|      Select an option to proceed further.         |\n";
+            cout << "\t=====================================================\n";
+
+            cout << "\n\t- Your choice: ";
+            int ch;
+            cin >> ch;
+
+            switch (ch)
+            {
+            case 1:
+                admin.registerStudent(users);
+                break;
+            case 2:
+                admin.viewRegisteredStudents(users);
+                break;
+            case 3:
+            {
+                string code, name;
+                system("cls");
+                cout << "\t*****************************************************\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*             - - - ADD COURSE - - -                *\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*****************************************************\n";
+                cout << "\n\t- Enter course code: ";
+                cin >> code;
+                cout << "\n\t- Enter course name: ";
+                cin >> name;
+                courses.push_back(make_shared<Course>(code, name));
+                cout << "\n\t=====================================================\n";
+                cout << "\t|           Course added successfully!              |\n";
+                cout << "\t=====================================================\n";
+                break;
+            }
+            case 4:
+                for (const auto& course : courses)
+                {
+                    system("cls");
+                    cout << "\t*****************************************************\n";
+                    cout << "\t*                                                   *\n";
+                    cout << "\t*              - - - COURSES - - -                  *\n";
+                    cout << "\t*                                                   *\n";
+                    cout << "\t*****************************************************\n";
+                    cout << "\n\t";
+                    cout << course->getCode() << " - " << course->getName() << endl;
+                }
+                break;
+            case 0:
+                return;
+            default:
+                cout << "\n\t- Invalid choice!" << endl;
+            }
+        }
+    }
+
+    void studentMenu(shared_ptr<Student> student)
+    {
+        system("cls");
+        while (true)
+        {
+    
+
+            cout << "\n";
+            cout << "\t*****************************************************\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*           - - - STUDENT MENU - - -                *\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*****************************************************\n";
+
+            cout << "\n\t-----------------------------------------------------\n";
+            cout << "\t|  [1]  Enroll in Course                            |\n";
+            cout << "\t|  [2]  Mark Attendance                             |\n";
+            cout << "\t|  [3]  View Attendance                             |\n";
+            cout << "\t|  [0]  Logout                                      |\n";
+            cout << "\t-----------------------------------------------------\n";
+
+            cout << "\n\t=====================================================\n";
+            cout << "\t|      Select an option to proceed further.         |\n";
+            cout << "\t=====================================================\n";
+
+            cout << "\n\t- Your choice: ";
+            int choice;
+            cin >> choice;
+
+            switch (choice)
+            {
+            case 1:
+            {
+                system("cls");
+                string courseCode;
+                cout << "\n";
+                cout << "\t*****************************************************\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*          - - - COURSE ENROLLMENT - - -            *\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*****************************************************\n";
+                cout << "\n\t- Enter course code to enroll: ";
+                cin >> courseCode;
+                for (const auto& course : courses)
+                {
+                    if (course->getCode() == courseCode)
+                    {
+                        course->enrollStudent(student);
+                        break;
+                    }
+                }
+                break;
+            }
+            case 2:
+            {
+                system("cls");
+                string courseCode;
+                cout << "\n";
+                cout << "\t*****************************************************\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*          - - - MARK ATTENDENCE - - -              *\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*****************************************************\n";
+                cout << "\n\t- Enter course code to mark attendance: ";
+                cin >> courseCode;
+                student->markAttendance(courseCode);
+                break;
+            }
+            case 3:
+            {
+                system("cls");
+                string courseCode;
+                cout << "\n";
+                cout << "\t*****************************************************\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*           - - - VIEW ATTENDENCE - - -             *\n";
+                cout << "\t*                                                   *\n";
+                cout << "\t*****************************************************\n";
+                cout << "\n\t- Enter course code to view attendance: ";
+                cin >> courseCode;
+                student->viewAttendance(courseCode);
+                break;
+            }
+            case 0:
+                return;
+            default:
+                cout << "\n\t- Invalid choice!" << endl;
+            }
+        }
+    }
+
+    void mainMenu()
+    {
+        system("cls");
+        while (true)
+        {
+        
+
+            cout << "\n\n";
+            cout << "\t=====================================================\n";
+            cout << "\t|                                                   |\n";
+            cout << "\t|       *** UNIVERSITY MANAGEMENT SYSTEM ***        |\n";
+            cout << "\t|                                                   |\n";
+            cout << "\t=====================================================\n";
+
+            cout << "\n\t*****************************************************\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*                   MAIN MENU                       *\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*****************************************************\n";
+
+            cout << "\n\t-----------------------------------------------------\n";
+            cout << "\t|  [1]  Admin Login                                 |\n";
+            cout << "\t|  [2]  Student Login                               |\n";
+            cout << "\t|  [0]  Exit                                        |\n";
+            cout << "\t-----------------------------------------------------\n";
+
+            cout << "\n\t=====================================================\n";
+            cout << "\t|      Select an option to proceed further.         |\n";
+            cout << "\t=====================================================\n";
+
+            cout << "\n\t- Your choice: ";
+            int choice;
+            cin >> choice;
+
+            switch (choice)
+            {
+            case 1:
+                adminMenu();
+                break;
+            case 2:
+            {
+                system("cls");
+                string username, password;
+                cout << "\n";
+            cout << "\t*****************************************************\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*           - - - STUDENT LOGIN - - -               *\n";
+            cout << "\t*                                                   *\n";
+            cout << "\t*****************************************************\n";
+                cout << "\n\t- Enter username: ";
+                cin >> username;
+                cout << "\n\t- Enter password: ";
+                cin >> password;
+
+                for (const auto& user : users)
+                {
+                    if (user->getUsername() == username && user->getPassword() == password)
+                    {
+                        shared_ptr<Student> student = dynamic_pointer_cast<Student>(user);
+                        studentMenu(student);
+                        break;
+                    }                
+                }
+                break;
+            }
+            case 0:
+                return;
+            default:
+                cout << "\n\t- Invalid choice!" << endl;
+            }
+        }
+    }
+};
+
+int main()
+{
+    UniversityAttendanceSystem system;
+    system.mainMenu();
+    return 0;
+}
