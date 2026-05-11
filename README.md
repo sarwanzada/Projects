@@ -12,7 +12,6 @@ I work in the fields of:
 - Artificial Intelligence
 - Machine Learning
 - Data Science
-- Backend Development
 - AI Applications & Automation
 
 I am passionate about building secure, scalable, and impactful technology solutions.
@@ -22,6 +21,8 @@ I am passionate about building secure, scalable, and impactful technology soluti
 
 # 🚀 Features
 
+- C++ Basic Terminal Projects
+- Python Advance Projects
 - Modern and scalable architecture
 - Secure implementation practices
 - Clean and maintainable codebase
@@ -34,6 +35,7 @@ I am passionate about building secure, scalable, and impactful technology soluti
 
 # 🛠️ Technologies Used
 
+- C++ 
 - Python
 - JavaScript / TypeScript
 - Node.js
