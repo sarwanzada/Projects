@@ -97,7 +97,7 @@ For permissions, collaborations, or official usage requests, please contact the 
 # 📧 Contact
 
 **Sarwan Zada**  
-AI & ML Developer | Backend Developer
+ML Engineer
 
 - GitHub: https://github.com/sarwanzada
 - LinkedIn: http://www.linkedin.com/in/sarwan-zada
