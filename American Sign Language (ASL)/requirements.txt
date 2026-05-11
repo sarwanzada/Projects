@@ -1,0 +1,17 @@
+numpy==1.24.3
+tensorflow==2.13.0
+opencv-python==4.8.1.78
+protobuf==3.20.3
+mediapipe==0.10.5 --no-deps
+absl-py
+attrs
+flatbuffers
+sounddevice
+matplotlib==3.7.5
+Pillow
+ttkbootstrap
+pyttsx3
+SpeechRecognition
+googletrans==4.0.0-rc1
+pipwin
+pyaudio
