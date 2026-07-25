@@ -178,7 +178,7 @@ st.plotly_chart(fig2, use_container_width=True)
 # 7-day probability trend (using the last available rows, not a true future forecast —
 # river/weather forecasts beyond ~a week need a separate forecast API to extend further)
 # ---------------------------------------------------------------------------
-st.subheader(f"📅 Last {min(7, len(df_ready))} Days — Flood Probability Trend")
+st.subheader(f"📅 Last {min(7, len(df_ready))} Days: Flood Probability Trend")
 if not df_ready.empty:
     recent = df_ready.tail(7).copy()
     recent["flood_probability"] = model.predict_proba(recent[FEATURE_COLUMNS])[:, 1]
