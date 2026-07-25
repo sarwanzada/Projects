@@ -198,13 +198,11 @@ comparison_df = pd.DataFrame([
 ])
 st.dataframe(comparison_df, use_container_width=True)
 st.caption(
-    "XGBoost (tuned) is the deployed model — chosen for maximum recall (catches all "
-    "known flood events in testing), prioritizing missed-flood risk over false alarms, "
-    "which is standard practice for early-warning systems."
+    ""
 )
 
 st.markdown("---")
 st.caption(
     "Data sources: NASA POWER (rainfall, temperature, humidity, wind) and the Open-Meteo "
-    "Flood API (river discharge, based on the GloFAS reanalysis). Both are free, public APIs."
+    "Flood API (river discharge, based on the GloFAS reanalysis)."
 )
