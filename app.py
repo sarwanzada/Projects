@@ -7,7 +7,7 @@ import joblib
 import plotly.express as px
 from datetime import datetime, timedelta
 
-st.set_page_config(page_title="Flood Risk Forecasting — Indus Basin", layout="wide")
+st.set_page_config(page_title="Flood Risk Forecasting:  Indus Basin", layout="wide")
 
 # ---------------------------------------------------------------------------
 # Load the saved model package (model + threshold + feature list + location)
@@ -134,7 +134,7 @@ df["month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
 # ---------------------------------------------------------------------------
 df_ready = df.dropna(subset=[c for c in FEATURE_COLUMNS if c in df.columns]).reset_index(drop=True)
 
-st.title("🌊 Flood Risk Forecasting — Indus Basin")
+st.title("🌊 Flood Risk Forecasting: Indus Basin")
 st.caption(f"Location: {location_name} | Forecast horizon: next {FORECAST_HORIZON_DAYS} days | Data auto-refreshes hourly")
 
 if df_ready.empty:
