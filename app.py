@@ -66,6 +66,13 @@ def fetch_weather(lat, lon, days):
         "PRECTOTCORR": "rainfall_mm", "T2M": "temperature_c",
         "RH2M": "humidity_pct", "WS10M": "wind_speed_ms"
     })[["date", "rainfall_mm", "temperature_c", "humidity_pct", "wind_speed_ms"]]
+
+    # NASA POWER uses -999 as a placeholder for dates not yet processed
+    # (usually the most recent 1-3 days). Replace with NaN so they get
+    # interpolated/dropped instead of corrupting the model input.
+    value_cols = ["rainfall_mm", "temperature_c", "humidity_pct", "wind_speed_ms"]
+    weather_df[value_cols] = weather_df[value_cols].where(weather_df[value_cols] > -900)
+
     return weather_df
 
 
